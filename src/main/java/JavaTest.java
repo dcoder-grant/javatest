@@ -1,25 +1,25 @@
-import java.util.Scanner; 
+import io.undertow.Undertow;
+import io.undertow.server.HttpHandler;
+import io.undertow.server.HttpServerExchange;
+import io.undertow.util.Headers;
 
-  public class JavaTest{
-    public static void main(String[] args){
-      System.out.println("This Test app has started!");
+/**
+ *  * Hello world!
+ *   * Based on the Undertow examples: https://github.com/undertow-io/undertow/tree/master/examples
+ *    *
+ *     */
 
-      boolean x=true;
-      while (x){ 
-        System.out.println("This is a test of OpenJDK.\nPlease print something for the app to echo.\nEntering \"qapp\" + Enter should cancel this app.");
-        Scanner fun = new Scanner(System.in);
-        String input = fun.nextLine();
-        String quitString = "qapp";
-        if (input.equals(quitString)) {
-          x=false;
-          System.out.println("Boolean is set to: " + x);
-        }else if(input.equals(quitString +"\n")){
-          x=false;
-          System.out.println("Boolean is set to: " + x +  "+\"n\"");
-        }else{
-          System.out.println("You entered: "+input+"\n\n");
-        }
-      }
-      System.out.println("Exiting test app"); 
-    }
+public class JavaTest{
+  public static void main(String[] args){
+            Undertow server = Undertow.builder()
+                .addHttpListener(8080, "localhost")
+                .setHandler(new HttpHandler() {
+                    @Override
+                    public void handleRequest(final HttpServerExchange exchange) throws Exception {
+                        exchange.getResponseHeaders().put(Headers.CONTENT_TYPE, "text/plain");
+                        exchange.getResponseSender().send("Hello, world!");
+                    }
+                }).build();
+        server.start();
   }
+}
